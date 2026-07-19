@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client"
   output   = "../generated/prisma"
@@ -10,4 +5,60 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String
+  password  String
+  movieList MovieList[]
+  ratings   Rating[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Movie {
+  id            Int      @id @default(autoincrement())
+  title         String
+  description   String?
+  releaseYear   Int
+  genre         String
+  duration      Int
+  averageRating Float    @default(0)
+  totalRatings  Int      @default(0)
+  movieLists    MovieList[]
+  ratings       Rating[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("movies")
+}
+
+model MovieList {
+  id      Int   @id @default(autoincrement())
+  user    User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  Int
+  movie   Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  movieId Int
+  addedAt DateTime @default(now())
+
+  @@unique([userId, movieId])
+  @@map("movie_list")
+}
+
+model Rating {
+  id        Int      @id @default(autoincrement())
+  score     Float
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  movie     Movie    @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  movieId   Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, movieId])
+  @@map("ratings")
 }

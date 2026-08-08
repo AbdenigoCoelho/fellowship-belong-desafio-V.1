@@ -7,9 +7,20 @@ import { UsersModule } from './users/users.module';
 import { MoviesModule } from './movies/movies.module';
 import { MovieListModule } from './movie-list/movie-list.module';
 import { RatingsModule } from './ratings/ratings.module';
+import { MailModule } from './mail/mail.module';
+import { ExportModule } from './export/export.module';
 
 @Module({
-  imports: [PrismaModule, AuthModule, UsersModule, MoviesModule, MovieListModule, RatingsModule],
+  imports: [
+    PrismaModule,
+    AuthModule,
+    UsersModule,
+    MoviesModule,
+    MovieListModule,
+    RatingsModule,
+    MailModule,
+    ExportModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
